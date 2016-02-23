@@ -9,6 +9,7 @@ public class Ship : MonoBehaviour {
 	private float throttleSensitivity = .05F;
 	private Rigidbody2D rb;
 	public float acceleration = 3;
+    public float turnRate = 2.5F;
 
 	GameObject[] subsystems;
 
@@ -18,10 +19,6 @@ public class Ship : MonoBehaviour {
 	}
 	
 	void Update () {
-		//  Vector3 cameraPos = Camera.main.transform.position;
-		//  cameraPos.x = transform.position.x;
-		//  cameraPos.y = transform.position.y;
-		//  Camera.main.transform.position = cameraPos;
 
 	}
 	
@@ -49,25 +46,15 @@ public class Ship : MonoBehaviour {
 			throttle -= throttleSensitivity;
 		}
 		throttle = Mathf.Clamp01 (throttle);
-
-        //Facing Behavior
-		// Vector3 newHeading = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-		// diff.Normalize();
-		
-		// float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-		// transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
         
 		//Turning
 		float horizontal = Input.GetAxis ("Horizontal");
 
 		if (horizontal < 0) {
-			transform.RotateAround(transform.position,Vector3.forward,1F);	                                              
+			transform.RotateAround(transform.position,Vector3.forward,turnRate);	                                              
 		}
 		if (horizontal > 0) {
-			transform.RotateAround (transform.position, Vector3.forward, -1F);
+			transform.RotateAround(transform.position, Vector3.forward,-turnRate);
 		}
-
-//		Debug.Log (throttle);
-//		Debug.Log (horizontal);
 	}
 }
