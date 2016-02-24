@@ -41,7 +41,7 @@ class ChargedWeaponStateFiring : ChargedWeaponState {
     }
     
     public override void update(ChargedWeapon weapon) {
-        GameObject.Instantiate(weapon.projectile, weapon.transform.parent.transform.position, weapon.transform.parent.rotation);
+        GameObject.Instantiate(weapon.projectile, weapon.transform.position, weapon.transform.parent.rotation);
         weapon.currentState = new ChargedWeaponStateCooldown();
     }
 }
