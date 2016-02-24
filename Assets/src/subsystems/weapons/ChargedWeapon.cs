@@ -11,28 +11,28 @@ class ChargedWeaponState {
 }
 
 class ChargedWeaponStateCharging : ChargedWeaponState {
-    public float chargeTime; //How long it takes the weapon to fire
-    //public ParticleSystem chargingParticles; //A partical system to draw while the weapon is charging.
+    public float chargeTime = 2.0F; //How long it takes the weapon to fire
+    private float currentChargeTime; //How long the weapon has been charging
     
     public ChargedWeaponStateCharging() {
         Debug.Log("Began Charging");
+        currentChargeTime = 0F;
     }
     
     public override void handleInput(ChargedWeapon weapon) {
-        if(!Input.GetButtonDown("Fire1")) {
-            weapon.currentState = new ChargedWeaponStateIdle();
+        if (Input.GetButton("Fire1")) {
+            currentChargeTime += Time.deltaTime;
+            if (currentChargeTime >= chargeTime) {
+                weapon.currentState = new ChargedWeaponStateFiring();
+            }
         }
-    }
-    
-    public override void update(ChargedWeapon weapon) {
-        weapon.currentChargeTime += Time.deltaTime;
-        if (weapon.currentChargeTime >= chargeTime) {
-            weapon.currentState = new ChargedWeaponStateFiring();
+        else {
+            currentChargeTime -= Time.deltaTime;
+            if (currentChargeTime <= 0) {
+                weapon.currentState = new ChargedWeaponStateIdle();
+            }
         }
-    }
-    
-    ~ChargedWeaponStateCharging() {
-        //Stop animating particle system.
+        Debug.Log("Charged For: " + currentChargeTime + " / " + chargeTime);
     }
 }
 
@@ -42,11 +42,9 @@ class ChargedWeaponStateFiring : ChargedWeaponState {
         Debug.Log("Began Firing");
     }
     
-    public override void handleInput(ChargedWeapon weapon) {}
-    
     public override void update(ChargedWeapon weapon) {
-        GameObject.Instantiate(weapon.projectile, new Vector3(0F,0F,0F), weapon.transform.rotation);
-        weapon.currentState = new ChargedWeaponStateIdle();
+        GameObject.Instantiate(weapon.projectile, weapon.transform.parent.transform.position, weapon.transform.parent.rotation);
+        weapon.currentState = new ChargedWeaponStateCooldown();
     }
 }
 
@@ -57,29 +55,25 @@ class ChargedWeaponStateIdle : ChargedWeaponState {
     }
     
     public override void handleInput(ChargedWeapon weapon) {
-        if (Input.GetButtonDown("Fire1")) {
+        if (Input.GetButton("Fire1")) {
             weapon.currentState = new ChargedWeaponStateCharging();
         }
     }
-    
-    public override void update(ChargedWeapon weapon) {}
 }
 
-class ChargedWeaponStateDischarging : ChargedWeaponState {
+class ChargedWeaponStateCooldown : ChargedWeaponState {
+    public float cooldown = 1.0F;
+    private float currentCooldown;
     
-    public ChargedWeaponStateDischarging() {
-        Debug.Log("Began Discharging");
-    }
-    
-    public override void handleInput(ChargedWeapon weapon) {
-        if (Input.GetButtonDown("Fire1")) {
-            weapon.currentState = new ChargedWeaponStateCharging();
-        }
+    public ChargedWeaponStateCooldown() {
+        Debug.Log("Began Cooldown");
+        currentCooldown = 0F;
     }
     
     public override void update(ChargedWeapon weapon) {
-        weapon.currentChargeTime -= Time.deltaTime;
-        if (weapon.currentChargeTime <= 0) {
+        currentCooldown += Time.deltaTime;
+        
+        if (currentCooldown >= cooldown) {
             weapon.currentState = new ChargedWeaponStateIdle();
         }
     }
