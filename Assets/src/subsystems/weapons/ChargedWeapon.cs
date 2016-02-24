@@ -11,7 +11,7 @@ class ChargedWeaponState {
 }
 
 class ChargedWeaponStateCharging : ChargedWeaponState {
-    public float chargeTime = 2.0F; //How long it takes the weapon to fire
+    public float chargeTime = 0.5F; //How long it takes the weapon to fire
     private float currentChargeTime; //How long the weapon has been charging
     
     public ChargedWeaponStateCharging() {
