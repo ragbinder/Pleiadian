@@ -18,13 +18,13 @@ class ChargedWeaponStateCharging : ChargedWeaponState {
         Debug.Log("Began Charging");
     }
     
-    public void handleInput(ChargedWeapon weapon) {
+    public override void handleInput(ChargedWeapon weapon) {
         if(!Input.GetButtonDown("Fire1")) {
             weapon.currentState = new ChargedWeaponStateIdle();
         }
     }
     
-    public void update(ChargedWeapon weapon) {
+    public override void update(ChargedWeapon weapon) {
         weapon.currentChargeTime += Time.deltaTime;
         if (weapon.currentChargeTime >= chargeTime) {
             weapon.currentState = new ChargedWeaponStateFiring();
@@ -37,18 +37,16 @@ class ChargedWeaponStateCharging : ChargedWeaponState {
 }
 
 class ChargedWeaponStateFiring : ChargedWeaponState {
-    private float maxFireTime;
-    private float currentFireTime;
     
     public ChargedWeaponStateFiring() {
-        currentFireTime = 0F;
         Debug.Log("Began Firing");
     }
     
-    public void handleInput(ChargedWeapon weapon) {}
+    public override void handleInput(ChargedWeapon weapon) {}
     
-    public void update(ChargedWeapon weapon) {
+    public override void update(ChargedWeapon weapon) {
         GameObject.Instantiate(weapon.projectile, new Vector3(0F,0F,0F), weapon.transform.rotation);
+        weapon.currentState = new ChargedWeaponStateIdle();
     }
 }
 
@@ -58,13 +56,13 @@ class ChargedWeaponStateIdle : ChargedWeaponState {
         Debug.Log("Began Idle");
     }
     
-    public void handleInput(ChargedWeapon weapon) {
+    public override void handleInput(ChargedWeapon weapon) {
         if (Input.GetButtonDown("Fire1")) {
             weapon.currentState = new ChargedWeaponStateCharging();
         }
     }
     
-    public void update(ChargedWeapon weapon) {}
+    public override void update(ChargedWeapon weapon) {}
 }
 
 class ChargedWeaponStateDischarging : ChargedWeaponState {
@@ -73,13 +71,13 @@ class ChargedWeaponStateDischarging : ChargedWeaponState {
         Debug.Log("Began Discharging");
     }
     
-    public void handleInput(ChargedWeapon weapon) {
+    public override void handleInput(ChargedWeapon weapon) {
         if (Input.GetButtonDown("Fire1")) {
             weapon.currentState = new ChargedWeaponStateCharging();
         }
     }
     
-    public void update(ChargedWeapon weapon) {
+    public override void update(ChargedWeapon weapon) {
         weapon.currentChargeTime -= Time.deltaTime;
         if (weapon.currentChargeTime <= 0) {
             weapon.currentState = new ChargedWeaponStateIdle();
