@@ -10,7 +10,6 @@ class ChargedWeaponState {
 }
 
 class ChargedWeaponStateCharging : ChargedWeaponState {
-    public float chargeTime = 0.5F; //How long it takes the weapon to fire
     private float currentChargeTime; //How long the weapon has been charging
     
     public ChargedWeaponStateCharging() {
@@ -21,7 +20,7 @@ class ChargedWeaponStateCharging : ChargedWeaponState {
     public override void handleInput(ChargedWeapon weapon) {
         if (Input.GetButton("Fire1")) {
             currentChargeTime += Time.deltaTime;
-            if (currentChargeTime >= chargeTime) {
+            if (currentChargeTime >= weapon.chargeTime) {
                 weapon.currentState = new ChargedWeaponStateFiring();
             }
         }
@@ -31,7 +30,7 @@ class ChargedWeaponStateCharging : ChargedWeaponState {
                 weapon.currentState = new ChargedWeaponStateIdle();
             }
         }
-        Debug.Log("Charged For: " + currentChargeTime + " / " + chargeTime);
+        Debug.Log("Charged For: " + currentChargeTime + " / " + weapon.chargeTime);
     }
 }
 
@@ -61,7 +60,6 @@ class ChargedWeaponStateIdle : ChargedWeaponState {
 }
 
 class ChargedWeaponStateCooldown : ChargedWeaponState {
-    public float cooldown = 1.0F;
     private float currentCooldown;
     
     public ChargedWeaponStateCooldown() {
@@ -72,7 +70,7 @@ class ChargedWeaponStateCooldown : ChargedWeaponState {
     public override void update(ChargedWeapon weapon) {
         currentCooldown += Time.deltaTime;
         
-        if (currentCooldown >= cooldown) {
+        if (currentCooldown >= weapon.cooldown) {
             weapon.currentState = new ChargedWeaponStateIdle();
         }
     }
@@ -81,6 +79,8 @@ class ChargedWeaponStateCooldown : ChargedWeaponState {
 public class ChargedWeapon : Weapon {
     public Transform projectile; //The projectile that is spawned when the weapon fires
     internal ChargedWeaponState currentState;
+    public float chargeTime = 0.5F;
+    public float cooldown = 1.0F;
     
 	// Use this for initialization
 	void Start () {
