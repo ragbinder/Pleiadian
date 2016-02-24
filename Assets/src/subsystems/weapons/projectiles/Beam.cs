@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Beam : Projectile {
-
+    
 	// Use this for initialization
 	void Start () {
 	
