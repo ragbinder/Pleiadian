@@ -3,7 +3,6 @@
 //begin firing/discharging when the charge time is reached.
 
 using UnityEngine;
-using System.Collections;
 
 class ChargedWeaponState {
     public virtual void handleInput(ChargedWeapon weapon) {}
@@ -80,11 +79,8 @@ class ChargedWeaponStateCooldown : ChargedWeaponState {
 }
 
 public class ChargedWeapon : Weapon {
-    public Vector3 localTransform; //Where the weapon is on the ship
     public Transform projectile; //The projectile that is spawned when the weapon fires
-    
     internal ChargedWeaponState currentState;
-    internal float currentChargeTime; //How long the weapon has been charging
     
 	// Use this for initialization
 	void Start () {
