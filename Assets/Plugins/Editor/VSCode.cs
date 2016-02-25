@@ -350,7 +350,7 @@ namespace dotBunny.Unity
             proc.StartInfo.UseShellExecute = false;
 #else
             //TODO: Allow for manual path to code?
-            proc.StartInfo.FileName = "code";
+            proc.StartInfo.FileName = "visual-studio-code";
             proc.StartInfo.Arguments = args;
             proc.StartInfo.UseShellExecute = false;
 #endif
